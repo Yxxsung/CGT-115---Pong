@@ -90,16 +90,25 @@ ballBody.apply_impulse_at_local_point(
     (random.randint(-STARTSPEED, STARTSPEED), random.randint(0,STARTSPEED)))
 space.add(ballBody, ballShape)
 
-topCollisionHandler = space.add_collision_handler(COLLTYPE_TOP, COLLTYPE_BALL)
-topCollisionHandler.begin = collide_top
+#I changed space.add_collision_handler to space.on_collision
+#To correct old syntax
+#topCollisionHandler = space.on_collision(COLLTYPE_TOP, COLLTYPE_BALL)
+#topCollisionHandler.begin = collide_top
 
-bottomCollisionHandler = space.add_collision_handler(COLLTYPE_BOTTOM, COLLTYPE_BALL)
-bottomCollisionHandler.begin = collide_bottom
+#bottomCollisionHandler = space.on_collision(COLLTYPE_BOTTOM, COLLTYPE_BALL)
+#bottomCollisionHandler.begin = collide_bottom
+
+#I then had to replace the above lines (93-100) with the following
+space.on_collision(COLLTYPE_TOP, COLLTYPE_BALL, begin=collide_top)
+space.on_collision(COLLTYPE_BOTTOM, COLLTYPE_BALL, begin=collide_bottom)
+
 
 paddleBody = pymunk.Body(1,100, pymunk.Body.KINEMATIC)
 paddleBody.position = (400, 570)
 paddleShape = pymunk.Poly.create_box(paddleBody, (100, 20))
 paddleShape.elasticity = 1.0
+#Added this line so that the paddle has a collision type and can collide with the ball
+paddleShape.collision_type = COLLTYPE_PADDLE
 space.add(paddleBody, paddleShape)
 
 
