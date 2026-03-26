@@ -8,8 +8,10 @@ import pygame
 import pymunk
 
 #constants and globals
-PADDLEMOVE = 0.5
-STARTSPEED = 30
+#I changed the speed of PADDLEMOVE to 1.5 (previously 0.5) to speed up the movement
+PADDLEMOVE = 1.5
+#I changed the startspeed from 30 to 15 to make the ball easier to follow
+STARTSPEED = 15
 score = 0
 done = False
 
