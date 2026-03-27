@@ -113,20 +113,20 @@ space.on_collision(COLLTYPE_BOTTOM, COLLTYPE_BALL, begin=collide_bottom)
 #First Paddle (added 1 after the name to make a second paddle
 paddleBody1 = pymunk.Body(1,100, pymunk.Body.KINEMATIC)
 paddleBody1.position = (400, 570)
-paddleShape = pymunk.Poly.create_box(paddleBody1, (100, 20))
-paddleShape.elasticity = 1.0
+paddleShape1 = pymunk.Poly.create_box(paddleBody1, (100, 20))
+paddleShape1.elasticity = 1.0
 #Added this line so that the paddle has a collision type and can collide with the ball
-paddleShape.collision_type = COLLTYPE_PADDLE
-space.add(paddleBody1, paddleShape)
+paddleShape1.collision_type = COLLTYPE_PADDLE
+space.add(paddleBody1, paddleShape1)
 
 #Second Paddle (copied code section above and made it fit the top of the window
 paddleBody2 = pymunk.Body(1,100, pymunk.Body.KINEMATIC)
 paddleBody2.position = (400, 270)
-paddleShape = pymunk.Poly.create_box(paddleBody2, (100, 20))
-paddleShape.elasticity = 1.0
+paddleShape2 = pymunk.Poly.create_box(paddleBody2, (100, 20))
+paddleShape2.elasticity = 1.0
 #Added this line so that the paddle has a collision type and can collide with the ball
-paddleShape.collision_type = COLLTYPE_PADDLE
-space.add(paddleBody2, paddleShape)
+paddleShape2.collision_type = COLLTYPE_PADDLE
+space.add(paddleBody2, paddleShape2)
 
 
 def drawBox(screen, body, shape):
@@ -189,8 +189,8 @@ while not done:
     drawBox(screen, leftBody, leftShape)
     drawBox(screen, rightBody, rightShape)
     drawBox(screen, bottomBody, bottomShape)
-    drawBox(screen, paddleBody1, paddleShape)
-    drawBox(screen, paddleBody2, paddleShape)
+    drawBox(screen, paddleBody1, paddleShape1)
+    drawBox(screen, paddleBody2, paddleShape2)
 
     #display score
     scoreSurface = font.render(str(score), True, (255, 255, 255))
