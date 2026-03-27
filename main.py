@@ -16,7 +16,8 @@ import pymunk
 PADDLEMOVE = 1.5
 #I changed the start speed from 30 to 15 to make the ball easier to follow
 STARTSPEED = 15
-score = 0
+score1 = 0
+score2 = 0
 done = False
 
 #collision stuff
@@ -25,16 +26,29 @@ COLLTYPE_BOTTOM = 2 #Already a loss barrier
 COLLTYPE_BALL = 3
 COLLTYPE_PADDLE = 4
 
+def reset_ball():
+    ballBody.position = (400,300)
+    ballBody.velocity = (0,0)
+
+    impulse = (
+        random.randint(-STARTSPEED, STARTSPEED),
+        random.randint(-STARTSPEED, STARTSPEED)
+    )
+
+    ballBody.apply_impulse_at_local_point(impulse)
+
 #These two def sections make the top and bottom colliders lose barriers
 def collide_top(space, arbiter, data):
-    global done
-    done = True
-    return True
+    global score1
+    score1 +=1 #adds one to the bottom player's score
+    reset_ball() #resets the ball for continuous play
+    return False
 
 def collide_bottom(space, arbiter, data):
-    global done
-    done=True
-    return True
+    global score2
+    score2 +=1 #Adds one to the top player's score
+    reset_ball()
+    return False
 
 
 #paddle mover
@@ -186,10 +200,12 @@ while not done:
     drawBox(screen, paddleBody2, paddleShape2)
 
     #display score
-    scoreSurface = font.render(str(score), True, (255, 255, 255))
-    textSize = scoreSurface.get_size()
-    textX = int(400 - (textSize[0] / 2))
-    screen.blit(scoreSurface, (textX, 20))
+    scoreSurface1 = font.render("P1: " + str(score1), True, (255,255,255))
+    screen.blit(scoreSurface1, (20,20))
+
+    scoreSurface2 = font.render("P2: " + str(score2), True, (255,255,255))
+    screen.blit(scoreSurface2, (650,20))
+
     pygame.display.update()
 
 doneSurface = font.render("GameOver", True, (255, 255, 255))
