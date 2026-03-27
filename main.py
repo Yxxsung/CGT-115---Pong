@@ -4,6 +4,8 @@
 
 #To Turn this into pong, I need to make it two player by adding a paddle at the top
 #That is controlled by different keys (a and d) and make it so whoever fails loses
+#Also make it so the score is based off paddle hits and has two counters
+#one for each player
 
 import random
 import pygame
@@ -23,9 +25,10 @@ COLLTYPE_BOTTOM = 2 #Already a loss barrier
 COLLTYPE_BALL = 3
 COLLTYPE_PADDLE = 4
 
+#These two def sections make the top and bottom colliders lose barriers
 def collide_top(space, arbiter, data):
-    global score
-    score = score+10
+    global done
+    done = True
     return True
 
 def collide_bottom(space, arbiter, data):
@@ -86,7 +89,8 @@ rightShape.elasticity = 1.0
 space.add(rightBody, rightShape)
 
 ballBody = pymunk.Body(1,100)
-ballBody.position = (random.randint(25,775), 25)
+#changed the 3 value parameters in the bellow line to change where the ball spawns
+ballBody.position = (random.randint(250,775), 250)
 ballShape = pymunk.Circle(ballBody, 10)
 ballShape.elasticity = 1.0
 ballShape.collision_type = COLLTYPE_BALL
@@ -106,14 +110,23 @@ space.add(ballBody, ballShape)
 space.on_collision(COLLTYPE_TOP, COLLTYPE_BALL, begin=collide_top)
 space.on_collision(COLLTYPE_BOTTOM, COLLTYPE_BALL, begin=collide_bottom)
 
-
-paddleBody = pymunk.Body(1,100, pymunk.Body.KINEMATIC)
-paddleBody.position = (400, 570)
-paddleShape = pymunk.Poly.create_box(paddleBody, (100, 20))
+#First Paddle (added 1 after the name to make a second paddle
+paddleBody1 = pymunk.Body(1,100, pymunk.Body.KINEMATIC)
+paddleBody1.position = (400, 570)
+paddleShape = pymunk.Poly.create_box(paddleBody1, (100, 20))
 paddleShape.elasticity = 1.0
 #Added this line so that the paddle has a collision type and can collide with the ball
 paddleShape.collision_type = COLLTYPE_PADDLE
-space.add(paddleBody, paddleShape)
+space.add(paddleBody1, paddleShape)
+
+#Second Paddle (copied code section above and made it fit the top of the window
+paddleBody2 = pymunk.Body(1,100, pymunk.Body.KINEMATIC)
+paddleBody2.position = (400, 270)
+paddleShape = pymunk.Poly.create_box(paddleBody2, (100, 20))
+paddleShape.elasticity = 1.0
+#Added this line so that the paddle has a collision type and can collide with the ball
+paddleShape.collision_type = COLLTYPE_PADDLE
+space.add(paddleBody2, paddleShape)
 
 
 def drawBox(screen, body, shape):
@@ -126,6 +139,7 @@ def drawBox(screen, body, shape):
                      (topLeft[0],topLeft[1],width,height))
 
 
+#Works with Paddle 1
 leftArrowDown = False
 rightArrowDown = False
 while not done:
@@ -144,7 +158,29 @@ while not done:
             if event.key == pygame.K_RIGHT:
                 rightArrowDown = False
 
-    MovePaddle(paddleBody, paddleShape,leftArrowDown,rightArrowDown)
+#Have to make this for the a and d keys to make it work for Paddle 2
+leftArrowDown = False
+rightArrowDown = False
+while not done:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            done = True
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_LEFT:
+                leftArrowDown = True
+            if event.key == pygame.K_RIGHT:
+                rightArrowDown = True
+        if event.type == pygame.KEYUP:
+            if event.key == pygame.K_LEFT:
+                leftArrowDown = False
+            if event.key == pygame.K_RIGHT:
+                rightArrowDown = False
+
+    #Moves Paddle 1 according to the left and right arrows as originally intended
+    MovePaddle(paddleBody1, paddleShape,leftArrowDown,rightArrowDown)
+    #Moves Paddle 2 using the a and d keys
+    MovePaddle(paddleBody2, paddleShape, leftArrowDown, rightArrowDown)
     space.step(1/60.0)
     screen.fill((0, 0, 0))
     pygame.draw.circle(screen, (255, 255, 255), ballBody.position, 10)
