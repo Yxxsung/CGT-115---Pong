@@ -14,7 +14,7 @@ import pymunk
 #constants and globals
 #I changed the speed of PADDLEMOVE to 1.5 (previously 0.5) to speed up the movement
 PADDLEMOVE = 1.5
-#I changed the startspeed from 30 to 15 to make the ball easier to follow
+#I changed the start speed from 30 to 15 to make the ball easier to follow
 STARTSPEED = 15
 score = 0
 done = False
@@ -121,7 +121,7 @@ space.add(paddleBody1, paddleShape1)
 
 #Second Paddle (copied code section above and made it fit the top of the window
 paddleBody2 = pymunk.Body(1,100, pymunk.Body.KINEMATIC)
-paddleBody2.position = (400, 270)
+paddleBody2.position = (400, 100)
 paddleShape2 = pymunk.Poly.create_box(paddleBody2, (100, 20))
 paddleShape2.elasticity = 1.0
 #Added this line so that the paddle has a collision type and can collide with the ball
@@ -139,48 +139,41 @@ def drawBox(screen, body, shape):
                      (topLeft[0],topLeft[1],width,height))
 
 
-#Works with Paddle 1
+#Works with the mechanics of both paddles
 leftArrowDown = False
 rightArrowDown = False
+AKeyDown = False
+DKeyDown = False
+
 while not done:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
             done = True
+
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_LEFT:
                 leftArrowDown = True
             if event.key == pygame.K_RIGHT:
                 rightArrowDown = True
+            if event.key == pygame.K_a:
+                AKeyDown = True
+            if event.key == pygame.K_d:
+                DKeyDown = True
+
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_LEFT:
                 leftArrowDown = False
             if event.key == pygame.K_RIGHT:
                 rightArrowDown = False
-
-#Have to make this for the a and d keys to make it work for Paddle 2
-AKeyDown = False
-DKeyDown = False
-while not done:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            pygame.quit()
-            done = True
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_a:
-                AKeyDown = True
-            if event.key == pygame.K_d:
-                DKeyDown = True
-        if event.type == pygame.KEYUP:
             if event.key == pygame.K_a:
                 AKeyDown = False
             if event.key == pygame.K_d:
                 DKeyDown = False
 
-    #Moves Paddle 1 according to the left and right arrows as originally intended
-    MovePaddle(paddleBody1, paddleShape,leftArrowDown,rightArrowDown)
-    #Moves Paddle 2 using the a and d keys
-    MovePaddle(paddleBody2, paddleShape, AKeyDown, DKeyDown)
+    #Moves both Paddles according to the new mechanics
+    MovePaddle(paddleBody1, paddleShape1,leftArrowDown,rightArrowDown)
+    MovePaddle(paddleBody2, paddleShape2,AKeyDown,DKeyDown)
 
     space.step(1/60.0)
     screen.fill((0, 0, 0))
