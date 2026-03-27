@@ -159,28 +159,29 @@ while not done:
                 rightArrowDown = False
 
 #Have to make this for the a and d keys to make it work for Paddle 2
-leftArrowDown = False
-rightArrowDown = False
+AKeyDown = False
+DKeyDown = False
 while not done:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
             done = True
         if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_LEFT:
-                leftArrowDown = True
-            if event.key == pygame.K_RIGHT:
-                rightArrowDown = True
+            if event.key == pygame.K_a:
+                AKeyDown = True
+            if event.key == pygame.K_d:
+                DKeyDown = True
         if event.type == pygame.KEYUP:
-            if event.key == pygame.K_LEFT:
-                leftArrowDown = False
-            if event.key == pygame.K_RIGHT:
-                rightArrowDown = False
+            if event.key == pygame.K_a:
+                AKeyDown = False
+            if event.key == pygame.K_d:
+                DKeyDown = False
 
     #Moves Paddle 1 according to the left and right arrows as originally intended
     MovePaddle(paddleBody1, paddleShape,leftArrowDown,rightArrowDown)
     #Moves Paddle 2 using the a and d keys
-    MovePaddle(paddleBody2, paddleShape, leftArrowDown, rightArrowDown)
+    MovePaddle(paddleBody2, paddleShape, AKeyDown, DKeyDown)
+
     space.step(1/60.0)
     screen.fill((0, 0, 0))
     pygame.draw.circle(screen, (255, 255, 255), ballBody.position, 10)
@@ -188,7 +189,9 @@ while not done:
     drawBox(screen, leftBody, leftShape)
     drawBox(screen, rightBody, rightShape)
     drawBox(screen, bottomBody, bottomShape)
-    drawBox(screen, paddleBody, paddleShape)
+    drawBox(screen, paddleBody1, paddleShape)
+    drawBox(screen, paddleBody2, paddleShape)
+
     #display score
     scoreSurface = font.render(str(score), True, (255, 255, 255))
     textSize = scoreSurface.get_size()
