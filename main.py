@@ -2,6 +2,9 @@
 #Pong Assignment
 #Last Updated: 03/26/26
 
+#To Turn this into pong, I need to make it two player by adding a paddle at the top
+#That is controlled by different keys (a and d) and make it so whoever fails loses
+
 import random
 import pygame
 import pymunk
@@ -15,8 +18,8 @@ score = 0
 done = False
 
 #collision stuff
-COLLTYPE_TOP = 1
-COLLTYPE_BOTTOM = 2
+COLLTYPE_TOP = 1  #The collision for the top needs to be made into a loss barrier
+COLLTYPE_BOTTOM = 2 #Already a loss barrier
 COLLTYPE_BALL = 3
 COLLTYPE_PADDLE = 4
 
